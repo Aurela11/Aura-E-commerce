@@ -80,27 +80,27 @@ router.post("/confirm-payment", async (req, res) => {
   }
 });
 
-// Merr të gjitha porositë e një email-i
-router.get("/:email", async (req, res) => {
-  try {
-    const orders = await prisma.order.findMany({ where: { email: req.params.email } });
-    res.status(200).send({ orders });
-  } catch (error) {
-    console.error("Error fetching orders by email", error);
-    res.status(500).send({ message: "Failed to fetch orders by email" });
-  }
-});
-
-// Merr një porosi sipas ID
-// Në orders.route.js
+/// Merr një porosi sipas ID
 router.get("/:orderId", async (req, res) => {
   try {
     const order = await prisma.order.findUnique({
-      where: { id: req.params.id },
+      where: { orderId: req.params.orderId },
     });
-    res.status(200).json(order); // Kthe si JSON
+    res.status(200).json(order);
   } catch (error) {
     res.status(500).json({ error: "Gabim serveri" });
+  }
+});
+
+// Merr të gjitha porositë e një email-i
+router.get("/:email", async (req, res) => {
+  try {
+    const orders = await prisma.order.findMany({ 
+      where: { email: req.params.email } 
+    });
+    res.status(200).send({ orders });
+  } catch (error) {
+    res.status(500).send({ message: "Gabim" });
   }
 });
 
