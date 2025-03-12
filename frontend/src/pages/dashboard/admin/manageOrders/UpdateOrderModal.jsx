@@ -6,13 +6,22 @@ const UpdateOrderModal = ({order, isOpen, onClose}) => {
 
     const [updateOrderStatus, {isLoading, error}] = useUpdateOrderStatusMutation();
     const handleUpdateOrderStatus = async () => {
-     try {
-       await updateOrderStatus ({id: order?._id, status}) 
-       onClose();
-     } catch (error) {
-       console.error("Failed to update order status:" , error) 
-     }   
+      if (!order || !order.id) { // Changed from orderId to id
+        console.error('Order ID is missing!');
+        return;
+      }
+    
+      try {
+        await updateOrderStatus({ 
+          id: order.id, // Use Prisma-generated ID instead of Stripe orderId
+          status 
+        });
+        onClose();
+      } catch (error) {
+        console.error('Failed to update order status:', error);
+      }
     }
+    
     if(!isOpen) return null;
     return (
    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-80'>
@@ -22,18 +31,21 @@ const UpdateOrderModal = ({order, isOpen, onClose}) => {
      <div className='mb-4'>
       <label className='block text-gray-700 mb-2' htmlFor="status">Status</label>
       <select 
-       id="status"
-       value={status}
-       onChange={(e) => setStatus(e.target.value)}
-       className='border border-gray-300 rounded w-full'
-       >
+  id="status"
+  value={status}
+  onChange={(e) => setStatus(e.target.value)}
+  className='border border-gray-300 rounded w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-400'
+>
+
        <option value="pending">Pending</option>
        <option value="processing">Processing</option>
        <option value="shipped">Shipped</option>
        <option value="completed">Completed</option>
       </select>
      </div>
-     {error && <p className='text-red-500 mb-4'>Failed to update status.</p>}
+     {error && <p className='text-red-500 mb-4'>
+  {error.data?.message || 'Failed to update status'}
+</p>}
      <div className='flex justify-end space-x-2'>
         <button
         onClick={onClose}

@@ -14,6 +14,7 @@ const ManageOrders = () => {
       setSelectedOrder(order);
       setIsModalOpen(true);
     }
+    
 
     const handleCloseModal = () => {
      setIsModalOpen(false);
@@ -21,14 +22,20 @@ const ManageOrders = () => {
     }
 
     const handleDeleteOrder = async (orderId) => {
-         try {
-          await deleteOrder(orderId).unwrap();
-          alert("Order deleted successfully");
-          refetch();
-         } catch (error) {
-          console.error("Failed to delete order", error)
-         }
-    }
+      if (!orderId) {
+        console.error("Invalid orderId:", orderId);
+        alert("Order ID is missing!");
+        return;
+      }
+      try {
+        await deleteOrder(orderId).unwrap();
+        alert("Order deleted successfully");
+        refetch();
+      } catch (error) {
+        console.error("Failed to delete order", error);
+      }
+    };
+    
     if(isLoading) return <div>Loading...</div>
     if(error) return <div>Somthiing went wrong</div>
   return (
@@ -56,11 +63,11 @@ const ManageOrders = () => {
                 </td>
                 <td className='py-3 px-4 border-b'>{formateDate(order?.updatedAt)}</td>
                 <td className='py-3 px-4 border-b flex items-center space-x-4'>
-                  <Link to='#' className='text-blue-500 hover:underline '>View</Link>
+                <Link to={`/orders/${order?.orderId}`}  className='text-blue-500 hover:underline'>View</Link>
                   <button className='text-green-500 hover:underline'
                   onClick={() => handleEditOrder(order)}>Edit</button>
                    <button className='text-red-500 hover:underline'
-                  onClick={() => handleDeleteOrder(order?._id)}>Delete</button>
+                 onClick={() => handleDeleteOrder(order.id)}>Delete</button>
                 </td>
               </tr>
             ))
@@ -70,11 +77,11 @@ const ManageOrders = () => {
       {/* update order modal*/}
       {
         selectedOrder && (
-         <UpdateOrderModal
-          order={selectedOrder}
+          <UpdateOrderModal
           isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          />
+          onClose={() => setIsModalOpen(false)}
+          order={selectedOrder}  // Passing selectedOrder to modal
+        />
         )
       }
     </div>

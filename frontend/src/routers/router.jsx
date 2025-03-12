@@ -12,7 +12,6 @@ import { DashboardLayout } from "../pages/dashboard/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import UserDMain from "../pages/dashboard/user/dashboard/UserDMain";
 import UserOrders from "../pages/dashboard/user/UserOrders";
-import OrderDetails from "../pages/dashboard/user/OrderDetails";
 import UserPayments from "../pages/dashboard/user/UserPayments";
 import UserReviews from "../pages/dashboard/user/UserReviews";
 import UserProfile from "../pages/dashboard/user/UserProfile";
@@ -22,6 +21,7 @@ import ManageProduct from "../pages/dashboard/admin/manageProduct/ManageProduct"
 import UpdateProduct from "../pages/dashboard/admin/manageProduct/UpdateProduct";
 import ManageUser from "../pages/dashboard/admin/users/ManageUser";
 import ManageOrders from "../pages/dashboard/admin/manageOrders/ManageOrders";
+import OrderDetails from "../pages/dashboard/user/OrderDetails";
 const router = createBrowserRouter([
     {
         path:"/",
@@ -32,6 +32,7 @@ const router = createBrowserRouter([
             {path:"/search",element: <Search/>},
             {path:"/shop",element: <ShopPage/>},
             {path:"/shop/:id",element: <SingleProduct/>},
+            // {path:"/order/:id",element: <OrderDetails/>},
             {
                 path:"/success",
                 element: <PaymentSuccess/>
@@ -90,6 +91,7 @@ const router = createBrowserRouter([
                 path: "manage-orders",
                 element: <PrivateRoute role="admin"><ManageOrders/></PrivateRoute>
             },
+            
         ]
     }
 ]);

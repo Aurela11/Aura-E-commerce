@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:root@localhost:3306/orderDB"
+}
+
+model Order {
+  id      String @id @default(uuid())  // This is the ID we should use
+  orderId String @unique
+  products  Json
+  amount    Decimal
+  email     String
+  status    String  @default("pending")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -17,9 +17,9 @@ const orderApi = createApi({
          providesTags: ['Order']
         }),
         getOrderById: builder.query({
-          query:(orderId) => ({
-            url: `/order/${orderId}`,
-            method:'GET'
+          query: (id) => ({
+            url: `/${id}`, // Përdor /:id direkt (pa /order/)
+            method: 'GET'
           }),
           providesTags: ['Order']
         }),
@@ -34,14 +34,13 @@ const orderApi = createApi({
           providesTags:['Order']
         }),
         updateOrderStatus: builder.mutation({
-          query: ({id, status}) => ({
-            url:`/update-order-status/${id}`,
-            method:'PATCH',
-            body:{status},
-            
+          query: ({ id, status }) => ({ // Changed parameter from orderId to id
+            url: `/update-order-status/${id}`, // Updated endpoint path
+            method: 'PATCH',
+            body: { status },
           }),
-            invalidatesTags:['Order']
         }),
+        
         deleteOrder: builder.mutation({
           query: (id) => ({
             url:`/delete-order/${id}`,
